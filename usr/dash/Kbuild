@@ -35,12 +35,18 @@ targets := static/sh static/sh.g shared/sh shared/sh.g $(gen-o-files)
 # explicit dependency for all generated files
 $(addprefix $(obj)/, $(static/sh-y)): $(addprefix $(obj)/, $(gen-h-files))
 
-# Generate token.h
-targets += token.h
+$(obj)/mksyntax: $(obj)/token.h
+
+# Generate token{,_vars}.h
+targets += token.h token_vars.h
 quiet_cmd_mktokens = GEN     $@
       cmd_mktokens = (cd $(obj) && sh $(srctree)/$(src)/mktokens)
 $(obj)/token.h: $(src)/mktokens
 	$(call if_changed,mktokens)
+
+# side effect..
+$(obj)/token_vars.h: $(obj)/token.h
+	$(Q):
 
 # Generate builtins.def
 targets += builtins.def

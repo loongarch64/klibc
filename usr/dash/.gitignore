@@ -11,3 +11,4 @@ sh
 sh.shared
 syntax.[ch]
 token.h
+token_vars.h
