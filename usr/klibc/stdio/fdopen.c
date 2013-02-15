@@ -15,7 +15,7 @@ struct _IO_file_pvt __stdio_headnode =
 	.next = &__stdio_headnode,
 };
 
-FILE *fdopen(int fd, const char *mode)
+FILE *fopencookie(void *cookie, const char *mode, cookie_io_functions_t funcs)
 {
 	struct _IO_file_pvt *f;
 	const size_t bufoffs =
@@ -29,9 +29,10 @@ FILE *fdopen(int fd, const char *mode)
 		goto err;
 
 	f->data = f->buf = (char *)f + bufoffs;
-	f->pub._IO_fileno = fd;
+	f->funcs = funcs;
+	f->cookie = cookie;
 	f->bufsiz = BUFSIZ;
-	f->bufmode = isatty(fd) ? _IOLBF : _IOFBF;
+	f->bufmode = _IOFBF;
 
 	/* Insert into linked list */
 	f->prev = &__stdio_headnode;
@@ -46,6 +47,31 @@ err:
 		free(f);
 	errno = ENOMEM;
 	return NULL;
+}
+
+FILE *fdopen(int fd, const char *mode)
+{
+	FILE *file;
+
+	/*
+	 * Cookie operations for ordinary files.  This is only safe because
+	 * all Linux architectures pass integers <= sizeof(pointer) and
+	 * pointers the same way, at least for non-structure arguments.
+	 */
+	const struct cookie_io_functions_t file_funcs = {
+		.read  = (cookie_read_function_t *)read,
+		.write = (cookie_write_function_t *)write,
+		.seek  = (cookie_seek_function_t *)lseek,
+		.close = (cookie_close_function_t *)close
+	};
+
+	file = fopencookie((void *)(intptr_t)fd, mode, file_funcs);
+	if (file) {
+		struct _IO_file_pvt *f = stdio_pvt(file);
+		f->isfile = true;
+		f->bufmode = isatty(fd) ? _IOLBF : _IOFBF;
+	}
+	return file;
 }
 
 void __init_stdio(void)

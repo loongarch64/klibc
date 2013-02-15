@@ -37,7 +37,7 @@ size_t _fread(void *buf, size_t count, FILE *file)
 				nb = f->bufsiz;
 			}
 
-			rv = read(f->pub._IO_fileno, rdptr, nb);
+			rv = f->funcs.read(f->cookie, rdptr, nb);
 			if (rv == -1) {
 				if (errno == EINTR || errno == EAGAIN)
 					continue;

@@ -12,8 +12,19 @@
 #include <stddef.h>
 #include <unistd.h>
 
+typedef ssize_t cookie_read_function_t(void *, char *, size_t);
+typedef ssize_t cookie_write_function_t(void *, const char *, size_t);
+typedef int cookie_seek_function_t(void *, off_t, int);
+typedef int cookie_close_function_t(void *);
+struct cookie_io_functions_t {
+	cookie_read_function_t *read;
+	cookie_write_function_t *write;
+	cookie_seek_function_t *seek;
+	cookie_close_function_t *close;
+};
+typedef struct cookie_io_functions_t cookie_io_functions_t;
+
 struct _IO_file {
-	int _IO_fileno;		/* Underlying file descriptor */
 	_Bool _IO_eof;		/* End of file flag */
 	_Bool _IO_error;	/* Error flag */
 };
@@ -41,6 +52,7 @@ enum _IO_bufmode {
  */
 __extern FILE *stdin, *stdout, *stderr;
 
+__extern FILE *fopencookie(void *, const char *, cookie_io_functions_t);
 __extern FILE *fopen(const char *, const char *);
 __extern FILE *fdopen(int, const char *);
 __extern int fclose(FILE *);
@@ -108,11 +120,6 @@ __extern_inline size_t
 fwrite(const void *__p, size_t __s, size_t __n, FILE * __f)
 {
 	return _fwrite(__p, __s * __n, __f) / __s;
-}
-
-__extern_inline int fileno(FILE *__f)
-{
-	return __f->_IO_fileno;
 }
 
 __extern_inline int ferror(FILE *__f)

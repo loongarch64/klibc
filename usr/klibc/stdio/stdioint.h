@@ -18,12 +18,15 @@
 struct _IO_file_pvt {
 	struct _IO_file pub;	/* Data exported to inlines */
 	struct _IO_file_pvt *prev, *next;
+	cookie_io_functions_t funcs;
+	void *cookie;		/* Cookie or file number */
 	char *buf;		/* Buffer */
 	char *data;		/* Location of input data in buffer */
 	unsigned int ibytes;	/* Input data bytes in buffer */
 	unsigned int obytes;	/* Output data bytes in buffer */
 	unsigned int bufsiz;	/* Total size of buffer */
 	enum _IO_bufmode bufmode; /* Type of buffering */
+	bool isfile;		  /* fileno() is valid on this file */
 };
 
 #define stdio_pvt(x) container_of(x, struct _IO_file_pvt, pub)

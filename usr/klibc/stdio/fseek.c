@@ -16,7 +16,7 @@ __extern int fseek(FILE *file, off_t where, int whence)
 	if (whence == SEEK_CUR)
 		where -= f->ibytes;
 
-	rv = lseek(f->pub._IO_fileno, where, whence);
+	rv = f->funcs.seek(f->cookie, where, whence);
 	if (__likely(rv >= 0)) {
 		f->pub._IO_eof = false;
 		f->ibytes = 0;

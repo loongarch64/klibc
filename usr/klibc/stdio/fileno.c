@@ -1,7 +1,12 @@
-#define __NO_STDIO_INLINES
 #include "stdioint.h"
 
-int fileno(FILE *__f)
+int fileno(FILE *file)
 {
-	return __f->_IO_fileno;
+	struct _IO_file_pvt *f = stdio_pvt(file);
+
+	if (f->isfile)
+		return (int)(intptr_t)f->cookie;
+
+	errno = EBADF;
+	return -1;
 }

@@ -23,7 +23,7 @@ static size_t fwrite_noflush(const void *buf, size_t count,
 			 * The buffer is empty and the write is large,
 			 * so bypass the buffering entirely.
 			 */
-			rv = write(f->pub._IO_fileno, p, count);
+			rv = f->funcs.write(f->cookie, p, count);
 			if (rv == -1) {
 				if (errno == EINTR || errno == EAGAIN)
 					continue;

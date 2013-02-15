@@ -18,7 +18,7 @@ int __fflush(struct _IO_file_pvt *f)
 
 	p = f->buf;
 	while (f->obytes) {
-		rv = write(f->pub._IO_fileno, p, f->obytes);
+		rv = f->funcs.write(f->cookie, p, f->obytes);
 		if (rv == -1) {
 			if (errno == EINTR || errno == EAGAIN)
 				continue;
