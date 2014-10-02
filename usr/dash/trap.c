@@ -315,6 +315,9 @@ void dotrap(void)
 	int i;
 	int savestatus;
 
+	if (!pendingsigs)
+		return;
+
 	savestatus = exitstatus;
 	pendingsigs = 0;
 	barrier();
@@ -322,6 +325,12 @@ void dotrap(void)
 	for (i = 0, q = gotsig; i < NSIG - 1; i++, q++) {
 		if (!*q)
 			continue;
+
+		if (evalskip) {
+			pendingsigs = i + 1;
+			break;
+		}
+
 		*q = 0;
 
 		p = trap[i + 1];
@@ -329,8 +338,6 @@ void dotrap(void)
 			continue;
 		evalstring(p, 0);
 		exitstatus = savestatus;
-		if (evalskip)
-			break;
 	}
 }
 
