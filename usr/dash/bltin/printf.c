@@ -46,8 +46,7 @@ static int	 getchr(void);
 #ifdef HAVE_STRTOD
 static double	 getdouble(void);
 #endif
-static intmax_t	 getintmax(void);
-static uintmax_t getuintmax(void);
+static uintmax_t getuintmax(int);
 static char	*getstr(void);
 static char	*mklong(const char *, const char *);
 static void      check_conversion(const char *, const char *);
@@ -181,14 +180,14 @@ pc:
 			/* skip to field width */
 			fmt += strspn(fmt, SKIP1);
 			if (*fmt == '*')
-				*param++ = getintmax();
+				*param++ = getuintmax(1);
 
 			/* skip to possible '.', get following precision */
 			fmt += strspn(fmt, SKIP2);
 			if (*fmt == '.')
 				++fmt;
 			if (*fmt == '*')
-				*param++ = getintmax();
+				*param++ = getuintmax(1);
 
 			fmt += strspn(fmt, SKIP2);
 
@@ -222,18 +221,18 @@ pc:
 			}
 			case 'd':
 			case 'i': {
-				intmax_t p = getintmax();
-				char *f = mklong(start, fmt);
-				PF(f, p);
+				uintmax_t p = getuintmax(1);
+				start = mklong(start, fmt);
+				PF(start, p);
 				break;
 			}
 			case 'o':
 			case 'u':
 			case 'x':
 			case 'X': {
-				uintmax_t p = getuintmax();
-				char *f = mklong(start, fmt);
-				PF(f, p);
+				uintmax_t p = getuintmax(0);
+				start = mklong(start, fmt);
+				PF(start, p);
 				break;
 			}
 #ifdef HAVE_STRTOD
@@ -408,30 +407,8 @@ getstr(void)
 	return val;
 }
 
-static intmax_t
-getintmax(void)
-{
-	intmax_t val = 0;
-	char *cp, *ep;
-
-	cp = *gargv;
-	if (cp == NULL)
-		goto out;
-	gargv++;
-
-	val = (unsigned char) cp[1];
-	if (*cp == '\"' || *cp == '\'')
-		goto out;
-
-	errno = 0;
-	val = strtoimax(cp, &ep, 0);
-	check_conversion(cp, ep);
-out:
-	return val;
-}
-
 static uintmax_t
-getuintmax(void)
+getuintmax(int sign)
 {
 	uintmax_t val = 0;
 	char *cp, *ep;
@@ -446,7 +423,7 @@ getuintmax(void)
 		goto out;
 
 	errno = 0;
-	val = strtoumax(cp, &ep, 0);
+	val = sign ? strtoimax(cp, &ep, 0) : strtoumax(cp, &ep, 0);
 	check_conversion(cp, ep);
 out:
 	return val;
