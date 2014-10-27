@@ -194,9 +194,12 @@ pc:
 				break;
 			}
 #ifdef HAVE_STRTOD
+			case 'a':
+			case 'A':
 			case 'e':
 			case 'E':
 			case 'f':
+			case 'F':
 			case 'g':
 			case 'G': {
 				double p = getdouble();
