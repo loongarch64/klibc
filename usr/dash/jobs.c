@@ -647,7 +647,7 @@ out:
 	return retval;
 
 sigout:
-	retval = 128 + pendingsigs;
+	retval = 128 + pending_sig;
 	goto out;
 }
 
@@ -1146,7 +1146,7 @@ waitproc(int block, int *status)
 		sigfillset(&mask);
 		sigprocmask(SIG_SETMASK, &mask, &oldmask);
 
-		while (!gotsigchld && !pendingsigs)
+		while (!gotsigchld && !pending_sig)
 			sigsuspend(&oldmask);
 
 		sigclearmask();

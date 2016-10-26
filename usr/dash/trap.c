@@ -74,7 +74,7 @@ char sigmode[NSIG - 1];
 /* indicates specified signal received */
 static char gotsig[NSIG - 1];
 /* last pending signal */
-volatile sig_atomic_t pendingsigs;
+volatile sig_atomic_t pending_sig;
 /* received SIGCHLD */
 int gotsigchld;
 
@@ -290,7 +290,7 @@ onsig(int signo)
 	}
 
 	gotsig[signo - 1] = 1;
-	pendingsigs = signo;
+	pending_sig = signo;
 
 	if (signo == SIGINT && !trap[SIGINT]) {
 		if (!suppressint)
@@ -313,7 +313,7 @@ void dotrap(void)
 	int i;
 	int status, last_status;
 
-	if (!pendingsigs)
+	if (!pending_sig)
 		return;
 
 	status = savestatus;
@@ -322,7 +322,7 @@ void dotrap(void)
 		status = exitstatus;
 		savestatus = status;
 	}
-	pendingsigs = 0;
+	pending_sig = 0;
 	barrier();
 
 	for (i = 0, q = gotsig; i < NSIG - 1; i++, q++) {
@@ -330,7 +330,7 @@ void dotrap(void)
 			continue;
 
 		if (evalskip) {
-			pendingsigs = i + 1;
+			pending_sig = i + 1;
 			break;
 		}
 
