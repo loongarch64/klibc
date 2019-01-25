@@ -15,7 +15,6 @@ Several changes have been made for klibc:
   klibc's own signal name array.  decode_signal() is changed similarly.
 * The read built-in implements the -t option like bash
 * mktokens is modified to support out-of-tree builds
-* mkbuiltins is modified to sort with LC_ALL=C
 * Some header files have header guards added
 * Changelog and some manual pages are omitted
 * Automatic whitespace fixups
