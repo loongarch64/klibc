@@ -14,7 +14,6 @@ Several changes have been made for klibc:
 * The signal_names[] array is replaced by a signal_name() function using
   klibc's own signal name array.  decode_signal() is changed similarly.
 * The read built-in implements the -t option like bash
-* mktokens is modified to support out-of-tree builds
 * Some header files have header guards added
 * Changelog and some manual pages are omitted
 * Automatic whitespace fixups
