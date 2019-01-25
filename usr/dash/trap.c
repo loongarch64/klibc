@@ -395,48 +395,45 @@ out:
 	/* NOTREACHED */
 }
 
-/*
- * Decode a signal name
- */
 int decode_signal(const char *string, int minsig)
 {
-	int i;
+	int signo;
 
 	if (is_number(string)) {
-		i = atoi(string);
-		if (i >= NSIG) {
+		signo = atoi(string);
+		if (signo >= NSIG) {
 			return -1;
 		}
-		return i;
+		return signo;
 	}
 
-	for ( i = minsig ; i < NSIG ; i++ ) {
-		if ( sys_sigabbrev[i] &&
-		     !strcasecmp(string, sys_sigabbrev[i]) )
-			return i;
+	for (signo = minsig; signo < NSIG; signo++) {
+		if (sys_sigabbrev[signo] &&
+		    !strcasecmp(string, sys_sigabbrev[signo]))
+			return signo;
 	}
 
 #ifdef SIGRTMIN
-	if ( !strncasecmp(string, "RTMIN", 5) ) {
+	if (!strncasecmp(string, "RTMIN", 5)) {
 		char *ep;
 
-		if ( string[5] && string[5] != '+' )
+		if (string[5] && string[5] != '+')
 			return -1;
-		i = SIGRTMIN + strtol(string+5, &ep, 10);
-		if ( *ep || i < SIGRTMIN || i > SIGRTMAX )
+		signo = SIGRTMIN + strtol(string+5, &ep, 10);
+		if (*ep || signo < SIGRTMIN || signo > SIGRTMAX)
 			return -1;
-		return i;
+		return signo;
 	}
 
-	if ( !strncasecmp(string, "RTMAX", 5) ) {
+	if (!strncasecmp(string, "RTMAX", 5)) {
 		char *ep;
 
-		if ( string[5] && string[5] != '-' )
+		if (string[5] && string[5] != '-')
 			return -1;
-		i = SIGRTMAX + strtol(string+5, &ep, 10);
-		if ( *ep || i < SIGRTMIN || i > SIGRTMAX )
+		signo = SIGRTMAX + strtol(string+5, &ep, 10);
+		if (*ep || signo < SIGRTMIN || signo > SIGRTMAX)
 			return -1;
-		return i;
+		return signo;
 	}
 #endif
 

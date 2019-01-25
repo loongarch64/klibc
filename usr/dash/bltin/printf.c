@@ -43,14 +43,14 @@
 static int	 conv_escape_str(char *);
 static char	*conv_escape(char *, int *);
 static int	 getchr(void);
+#ifdef HAVE_STRTOD
+static double	 getdouble(void);
+#endif
 static intmax_t	 getintmax(void);
 static uintmax_t getuintmax(void);
 static char	*getstr(void);
 static char	*mklong(const char *, const char *);
 static void      check_conversion(const char *, const char *);
-#ifdef HAVE_STRTOD
-static double	 getdouble(void);
-#endif
 
 static int	rval;
 static char  **gargv;
