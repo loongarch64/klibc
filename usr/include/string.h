@@ -45,5 +45,7 @@ __extern size_t strspn(const char *, const char *);
 __extern char *strstr(const char *, const char *);
 __extern char *strtok(char *, const char *);
 __extern char *strtok_r(char *, const char *, char **);
+__extern char *stpcpy(char *, const char *);
+__extern char *stpncpy(char *, const char *, size_t);
 
 #endif				/* _STRING_H */

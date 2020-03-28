@@ -42,6 +42,7 @@ sscanf.shared-y		:= sscanf.o
 stat.shared-y		:= stat.o
 statfs.shared-y		:= statfs.o
 stdio.shared-y		:= stdio.o
+stpcpy.shared-y		:= stpcpy.o
 strlcpycat.shared-y	:= strlcpycat.o
 strtoimax.shared-y	:= strtoimax.o
 strtotime.shared-y	:= strtotime.o

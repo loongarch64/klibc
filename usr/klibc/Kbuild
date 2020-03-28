@@ -46,6 +46,7 @@ klib-y += vsnprintf.o snprintf.o vsprintf.o sprintf.o \
 	  strstr.o strncmp.o strncpy.o strrchr.o \
 	  strxspn.o strspn.o strcspn.o strpbrk.o strsep.o strtok.o \
 	  strtok_r.o \
+	  stpcpy.o stpncpy.o \
 	  fnmatch.o \
 	  gethostname.o getdomainname.o getcwd.o \
 	  seteuid.o setegid.o \
