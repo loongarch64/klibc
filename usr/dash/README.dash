@@ -2,7 +2,7 @@ This version of dash was obtained from
 
 git://git.kernel.org/pub/scm/utils/dash/dash.git
 
-It corresponds up to changeset 46abc8c6d8a5e9a5712bdc1312c0b6960eec65a4.
+It corresponds up to changeset f30bd155ccbc3f084bbf03d56f9cc43f4b02af2a.
 
 Several changes have been made for klibc:
 
