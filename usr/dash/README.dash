@@ -35,7 +35,7 @@ HOWTO sync branch:
  | filterdiff --strip 2 --addoldprefix a/usr/dash/ --addnewprefix b/usr/dash/ \
        --exclude="*/configure.ac" --exclude="*/ChangeLog" \
        --exclude="*/dash.1" --exclude="*/Makefile.am" \
-       --exclude="*/mksignames.c" \
+       --exclude="*/mksignames.c" --exclude="*/.gitignore" \
  > dash.mbox
 
 2) Import patches from mailbox:
