@@ -104,6 +104,7 @@ The following is the last known status of various architectures:
    h8300:	 Not yet ported
    i386:	 Working
    ia64:	 Working
+   loongarch64:	 Working
    m68k:	 Working
    mips:	 Working
    mips64:	 Working

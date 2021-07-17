@@ -1,0 +1,20 @@
+# -*- makefile -*-
+#
+# arch/loongarch64/MCONFIG
+#
+# Special rules for this architecture.  Note that this is actually
+# included from the main Makefile, and that pathnames should be
+# accordingly.
+#
+
+KLIBCARCHREQFLAGS = -fno-pic -G 0 -fno-plt
+KLIBCOPTFLAGS     += -Os
+KLIBCBITSIZE      = 64
+
+# Extra linkflags when building the shared version of the library
+# This address needs to be reachable using normal inter-module
+# calls, and work on the memory models for this architecture
+# 2 MB - normal binaries start at 4 MB
+#
+# Use -Ttext-segment so that the special .LOONGARCH64* sections are moved as well.
+KLIBCSHAREDFLAGS     = -Ttext-segment 0x00200000
